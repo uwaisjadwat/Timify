@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+
+    xmlns:tools="http://schemas.android.com/tools"
+
+    tools:ignore="HardcodedText"
+
+    android:background="#1429c7">
+
+
+
+    <item
+
+        android:id="@+id/Activity1"
+
+        android:title="Home" />
+
+
+
+    <item
+
+        android:id="@+id/Activity2"
+
+        android:title="Create Entry" />
+
+
+
+    <item
+
+        android:id="@+id/Activity3"
+
+        android:title="View Entries" />
+
+
+
+</menu>

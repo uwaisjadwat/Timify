@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "698802613103",
+    "firebase_url": "https://opscpart2-98b8c-default-rtdb.firebaseio.com",
+    "project_id": "opscpart2-98b8c",
+    "storage_bucket": "opscpart2-98b8c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:698802613103:android:a021b3247bf931e7a9d69a",
+        "android_client_info": {
+          "package_name": "com.example.timify"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDB3Oq8U-C1g1KFzNBGah-Qbz4nMIF04H0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:698802613103:android:21d773d05e573f93a9d69a",
+        "android_client_info": {
+          "package_name": "com.example.timify_login"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDB3Oq8U-C1g1KFzNBGah-Qbz4nMIF04H0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
