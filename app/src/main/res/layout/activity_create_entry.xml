@@ -73,8 +73,8 @@
 
 
 
-                <Spinner
-                    android:id="@+id/spinnerCategory"
+                <EditText
+                    android:id="@+id/addCategory"
                     android:layout_width="match_parent"
                     android:layout_height="38dp"
                     android:contentDescription="Select category"
@@ -115,11 +115,13 @@
 
 
 
-                <TimePicker
+                <EditText
                     android:id="@+id/timePickerStartTime"
                     android:layout_width="match_parent"
-                    android:textColor="@color/white"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="41dp"
+                    android:hint="Double click here to open timer"
+                    android:background="@android:color/white"
+                    android:textColor="@color/black" />
 
 
 
@@ -134,12 +136,13 @@
 
 
 
-                <TimePicker
+                <EditText
                     android:id="@+id/timePickerEndTime"
                     android:layout_width="match_parent"
-                    android:textColor="@color/white"
-                    android:layout_height="wrap_content" />
-
+                    android:background="@android:color/white"
+                    android:textColor="@color/black"
+                    android:hint="Double click here to open timer"
+                    android:layout_height="41dp" />
 
 
                 <!-- Description -->
@@ -209,7 +212,7 @@
                     android:id="@+id/textViewMinDailyGoal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Minimum Daily Goal:"
+                    android:text="Minimum Daily Goal(Hours):"
                     android:textColor="@color/white"
                     android:textSize="16sp"
                     android:layout_marginTop="8dp" />
@@ -219,6 +222,7 @@
                 <EditText
                     android:id="@+id/editTextMinDailyGoal"
                     android:layout_width="match_parent"
+                    android:inputType="number"
                     android:background="@color/white"
                     android:layout_height="wrap_content" />
 
@@ -228,7 +232,7 @@
                     android:id="@+id/textViewMaxDailyGoal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Maximum Daily Goal:"
+                    android:text="Maximum Daily Goal(Hours): "
                     android:textColor="@color/white"
                     android:textSize="16sp"
                     android:layout_marginTop="16dp" />
@@ -239,6 +243,7 @@
                     android:id="@+id/editTextMaxDailyGoal"
                     android:layout_width="match_parent"
                     android:background="@color/white"
+                    android:inputType="number"
                     android:layout_height="wrap_content" />
 
 

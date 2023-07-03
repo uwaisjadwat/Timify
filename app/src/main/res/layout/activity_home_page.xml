@@ -68,7 +68,7 @@
             android:id="@+id/TestButton"
             android:layout_width="268dp"
             android:layout_height="69dp"
-            android:text="Test Button, does nothing"
+            android:text="View Graph Report"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.496"

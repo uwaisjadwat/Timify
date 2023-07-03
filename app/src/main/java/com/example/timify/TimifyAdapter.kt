@@ -1,50 +1,61 @@
 package com.example.timify
 
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-
-class TimifyAdapter(private val dataList: List<Task>) :
-    RecyclerView.Adapter<TimifyAdapter.ViewHolder>() {
+import org.w3c.dom.Text
 
 
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val textCategory: TextView = itemView.findViewById(R.id.textCategory)
-        val textDate: TextView = itemView.findViewById(R.id.textDate)
-        val textTime: TextView = itemView.findViewById(R.id.textTime)
-        val imagePhoto: ImageView = itemView.findViewById(R.id.imagePhoto)
-    }
+class TimifyAdapter(private val Recycleitem: ArrayList<Task>): RecyclerView.Adapter<TimifyAdapter.MyViewHolder>() {
 
 
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val itemView =
-            LayoutInflater.from(parent.context).inflate(R.layout.item_adapter, parent, false)
-        return ViewHolder(itemView)
-    }
-
-
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val data = dataList[position]
-
-
-
-        holder.textCategory.text = data.category
-        holder.textDate.text = data.date
-        holder.textTime.text = "${data.startTime} - ${data.endTime}"
-
-
-
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_adapter, parent, false)
+        return MyViewHolder(itemView)
     }
 
 
 
     override fun getItemCount(): Int {
-        return dataList.size
+        return Recycleitem.size
     }
+
+
+
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        val currentitem = Recycleitem[position]
+        holder.category.text = currentitem.category
+        holder.s_date.text = currentitem.date
+        holder.descrip.text = currentitem.description
+        holder.start_time.text = currentitem.startTime.toString()
+        holder.end_time.text = currentitem.endTime.toString()
+        holder.minGoal.text = currentitem.minDailyGoal.toString()
+        holder.maxGoal.text = currentitem.maxDailyGoal.toString()
+    }
+
+
+
+    class MyViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
+
+
+
+        val category : TextView =  itemView.findViewById(R.id.tvCategory)
+        val s_date : TextView = itemView.findViewById(R.id.tvDate)
+        val start_time : TextView = itemView.findViewById(R.id.tvStartTime)
+        val end_time : TextView = itemView.findViewById(R.id.tvEndTime)
+        val descrip : TextView = itemView.findViewById(R.id.tvDescription)
+        val minGoal : TextView = itemView.findViewById(R.id.tvMinDailyGoal)
+        val maxGoal : TextView = itemView.findViewById(R.id.tvMaxDailyGoal)
+
+
+
+    }
+
+
+
 }

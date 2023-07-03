@@ -13,23 +13,15 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 
 class RegisterPage : AppCompatActivity() {
-
-
     private lateinit var auth: FirebaseAuth
-    private lateinit var usersRef: DatabaseReference
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register_page)
 
 
-
         //initialising the firebase
         auth = Firebase.auth
-        val database = FirebaseDatabase.getInstance()
-        usersRef = database.getReference("users")
-
 
         //intialises the edit text from the view
         val username = findViewById<EditText>(R.id.reg_username)
@@ -45,7 +37,6 @@ class RegisterPage : AppCompatActivity() {
             val enteredPassword = password.text.toString()
 
 
-
             // if either the username or password is not entered this message shows
             if (enteredUsername.isEmpty() || enteredPassword.isEmpty()) {
                 Toast.makeText(this, "Username and Password cannot be empty", Toast.LENGTH_SHORT).show()
@@ -53,10 +44,12 @@ class RegisterPage : AppCompatActivity() {
 
                 //calls the registerUserAndCreateDatabaseEntry() method and passes the entered values into that method
                 registerUserAndCreateDatabaseEntry(enteredUsername, enteredPassword)
-                switchActivities()
+
+
             }
         }
     }
+
 
 
 
@@ -69,25 +62,6 @@ class RegisterPage : AppCompatActivity() {
                 //if the user is successfully added to the database
                 if (task.isSuccessful) {
                     Toast.makeText(this@RegisterPage, "Logged In", Toast.LENGTH_LONG).show()
-
-
-                    val userId = FirebaseAuth.getInstance().currentUser?.uid
-                    if (userId != null) {
-
-                        //creates the user in the realtime database
-                        val userRef = usersRef.child(userId)
-                        userRef.child("username").setValue(username)
-                            .addOnSuccessListener {
-                                Toast.makeText(this@RegisterPage, "User created in the Realtime Database", Toast.LENGTH_LONG).show()
-                            }
-
-
-                            .addOnFailureListener { exception ->
-                                Toast.makeText(this@RegisterPage, "Failed to create user in the Realtime Database: ${exception.message}", Toast.LENGTH_LONG).show()
-                            }
-                    }
-
-
 
                     //calls the method to take to the next page
                     switchActivities()

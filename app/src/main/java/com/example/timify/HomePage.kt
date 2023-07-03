@@ -43,12 +43,11 @@ class HomePage : AppCompatActivity(), NavigationView.OnNavigationItemSelectedLis
             startActivity(intent2)
         }
         testButton.setOnClickListener{
-
+            val intent3 = Intent(this, Graphs::class.java)
+            startActivity(intent3)
 
 
         }
-
-
 
         drawerLayout = findViewById(R.id.my_drawer_layout)
         actionBarDrawerToggle = ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close)

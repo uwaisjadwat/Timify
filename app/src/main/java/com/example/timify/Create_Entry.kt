@@ -1,11 +1,13 @@
 package com.example.timify
 
+import android.app.TimePickerDialog
 import android.content.ContentValues
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import android.widget.*
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -14,6 +16,11 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import java.text.SimpleDateFormat
 import java.util.*
@@ -23,17 +30,22 @@ class Create_Entry : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
 
+
     lateinit var drawerLayout: DrawerLayout
     lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
-    lateinit var spinnerCategory: Spinner
     lateinit var datePicker: DatePicker
-    lateinit var timePickerStartTime: TimePicker
-    lateinit var timePickerEndTime: TimePicker
     lateinit var editTextDescription: EditText
     lateinit var buttonAddPhoto: Button
     lateinit var editTextMinDailyGoal: EditText
     lateinit var editTextMaxDailyGoal: EditText
     lateinit var imageView:ImageView
+
+    lateinit var timePickerStartTime: EditText
+    lateinit var timePickerEndTime: EditText
+
+
+
+
 
 
     //val storage = FirebaseStorage.getInstance()
@@ -76,22 +88,60 @@ class Create_Entry : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
 
-        val catergories = arrayOf("Category 1", "Category 2", "Category 3")
-        spinnerCategory = findViewById<Spinner>(R.id.spinnerCategory)
+
+
         datePicker = findViewById<DatePicker>(R.id.datePicker)
-        timePickerStartTime = findViewById<TimePicker>(R.id.timePickerStartTime)
-        timePickerEndTime = findViewById<TimePicker>(R.id.timePickerEndTime)
+
         editTextDescription = findViewById<EditText>(R.id.editTextDescription)
         buttonAddPhoto = findViewById<Button>(R.id.buttonAddPhoto)
         editTextMinDailyGoal = findViewById<EditText>(R.id.editTextMinDailyGoal)
         editTextMaxDailyGoal = findViewById<EditText>(R.id.editTextMaxDailyGoal)
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, catergories)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinnerCategory.adapter = adapter
 
+
+
+        val timePickerStartTime = findViewById<EditText>(R.id.timePickerStartTime)
+        timePickerStartTime.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(view: View?) {
+                val calendar = Calendar.getInstance()
+                val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
+                val currentMinute = calendar.get(Calendar.MINUTE)
+                val timePickerDialog = TimePickerDialog(this@Create_Entry,
+                    { timePicker, hourOfDay, minutes ->
+                        val amPm = if (hourOfDay >= 12) {
+                            "PM"
+                        } else {
+                            "AM"
+                        }
+                        timePickerStartTime.setText(String.format("%02d:%02d", hourOfDay, minutes) + amPm)
+                    }, currentHour, currentMinute, false
+                )
+                timePickerDialog!!.show()
+            }
+        })
+
+        val timePickerEndTime = findViewById<EditText>(R.id.timePickerEndTime)
+        timePickerEndTime.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(view: View?) {
+                val calendar = Calendar.getInstance()
+                val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
+                val currentMinute = calendar.get(Calendar.MINUTE)
+                val timePickerDialog = TimePickerDialog(this@Create_Entry,
+                    { timePicker, hourOfDay, minutes ->
+                        val amPm = if (hourOfDay >= 12) {
+                            "PM"
+                        } else {
+                            "AM"
+                        }
+                        timePickerEndTime.setText(String.format("%02d:%02d", hourOfDay, minutes) + amPm)
+                    }, currentHour, currentMinute, false
+                )
+                timePickerDialog!!.show()
+            }
+        })
 
 
         imageView = findViewById<ImageView>(R.id.imageViewPhoto)
+
 
 
 
@@ -100,13 +150,15 @@ class Create_Entry : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
         buttonSave.setOnClickListener {
-            val selectedCategory = spinnerCategory.selectedItem.toString()
+            val selectedCategory = findViewById<EditText>(R.id.addCategory)
             val selectedDate = formatDate(datePicker.year, datePicker.month, datePicker.dayOfMonth)
-            val selectedStartTime = formatTime(timePickerStartTime.hour, timePickerStartTime.minute)
-            val selectedEndTime = formatTime(timePickerEndTime.hour, timePickerEndTime.minute)
+            val selectedStartTime = timePickerStartTime
+            val selectedEndTime = timePickerEndTime
             val enteredDescription = editTextDescription.text.toString()
             val enteredMinDailyGoal = editTextMinDailyGoal.text.toString()
             val enteredMaxDailyGoal = editTextMaxDailyGoal.text.toString()
+
+            sendDataToDatabase()
 
             Toast.makeText(this, "Entry Created !! ", Toast.LENGTH_LONG).show()
             val intent = Intent(this, HomePage::class.java)
@@ -119,6 +171,45 @@ class Create_Entry : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         buttonAddPhoto.setOnClickListener {
             pickImageGallery()
         }
+    }
+
+
+
+
+    //new code below
+
+    private fun sendDataToDatabase() {
+        val user = FirebaseAuth.getInstance().currentUser
+        val userId = user?.uid
+        val databaseReference = FirebaseDatabase.getInstance().getReference("users/$userId")
+
+        val selectedCategory = findViewById<EditText>(R.id.addCategory)
+        val selectedDate = formatDate(datePicker.year, datePicker.month, datePicker.dayOfMonth)
+        val selectedStartTime = timePickerStartTime
+        val selectedEndTime = timePickerEndTime
+        val enteredDescription = editTextDescription.text.toString()
+        val enteredMinDailyGoal = editTextMinDailyGoal.text.toString()
+        val enteredMaxDailyGoal = editTextMaxDailyGoal.text.toString()
+
+        val entryData = hashMapOf(
+            "category" to selectedCategory.text.toString(),
+            "date" to selectedDate,
+            "startTime" to selectedStartTime,
+            "endTime" to selectedEndTime,
+            "description" to enteredDescription,
+            "minDailyGoal" to enteredMinDailyGoal,
+            "maxDailyGoal" to enteredMaxDailyGoal
+        )
+
+        databaseReference.push().setValue(entryData)
+            .addOnSuccessListener {
+                Toast.makeText(this, "Entry Created!", Toast.LENGTH_LONG).show()
+                val intent = Intent(this, HomePage::class.java)
+                startActivity(intent)
+            }
+            .addOnFailureListener { exception ->
+                Toast.makeText(this, "Failed to create entry: ${exception.message}", Toast.LENGTH_LONG).show()
+            }
     }
 
 

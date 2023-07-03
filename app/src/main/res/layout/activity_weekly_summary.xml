@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Header -->
+    <LinearLayout
+        android:id="@+id/headerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#5E35B1"
+        android:padding="16dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textViewHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Monthly Summary"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@id/headerLayout"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/txt_total_hours"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total Hours: "
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <!-- Max Goal -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Max Goal"
+                android:textStyle="bold" />
+
+            <ProgressBar
+                android:id="@+id/progress_bar_max"
+                android:layout_width="240dp"
+                android:layout_height="240dp"
+                android:indeterminate="false"
+                android:max="100"
+                android:progressDrawable="@drawable/circular_progress_bar"
+                android:progress="0" />
+
+        </LinearLayout>
+
+        <!-- Min Goal -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Min Goal"
+                android:textStyle="bold" />
+
+            <ProgressBar
+                android:id="@+id/progress_bar_min"
+                android:layout_width="240dp"
+                android:layout_height="240dp"
+                android:indeterminate="false"
+                android:max="100"
+                android:progressDrawable="@drawable/circular_progress_bar"
+                android:progress="0" />
+
+        </LinearLayout>
+
+
+        <!-- Other views and layout components -->
+    </LinearLayout>
+</RelativeLayout>

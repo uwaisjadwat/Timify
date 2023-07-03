@@ -5,17 +5,14 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
 
 
 class ViewTimesheet : AppCompatActivity() {
-
-
-
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: TimifyAdapter
-    private lateinit var dataList: List<Task>
-
+    private lateinit var dbref: DatabaseReference
+    private lateinit var userRecyclerview: RecyclerView
+    private lateinit var userArrayList: ArrayList<Task>
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,33 +21,55 @@ class ViewTimesheet : AppCompatActivity() {
 
 
 
-        recyclerView = findViewById(R.id.recyclerView)
-        recyclerView = findViewById(R.id.recyclerView)
+        userRecyclerview = findViewById(R.id.userRecyclerView)
+        userRecyclerview.layoutManager = LinearLayoutManager(this)
+        userRecyclerview.setHasFixedSize(true)
 
 
 
-// Create sample data for demonstration
-        dataList = listOf(
-            Task("1", "Category A", "2023-06-01", "09:00", "13:00", "Description 1", null),
-            Task("2", "Category B", "2023-06-01", "14:00", "18:00", "Description 2", null),
-            Task("3", "Category A", "2023-06-02", "10:00", "12:00", "Description 3", null),
-            Task("4", "Category C", "2023-06-02", "13:00", "17:30", "Description 4", null),
-            Task("5", "Category B", "2023-06-03", "08:00", "12:30", "Description 5", null),
-            Task("6", "Category A", "2023-06-03", "14:00", "18:00", "Description 6", null),
-            Task("7", "Category B", "2023-06-04", "09:30", "11:30", "Description 7", null)
-        )
+        userArrayList = arrayListOf<Task>()
+        getUserData()
 
 
-
-// Create and set the adapter
-        adapter = TimifyAdapter(dataList)
-        recyclerView.adapter = adapter
-
-
-
-// Set the layout manager
-        recyclerView.layoutManager = LinearLayoutManager(this)
     }
+
+    private fun getUserData() {
+        val user = FirebaseAuth.getInstance().currentUser
+        val userId = user?.uid
+
+
+        dbref = FirebaseDatabase.getInstance().getReference("users/$userId")
+
+        dbref.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+
+                if (snapshot.exists()) {
+
+                    for (userSnapshot in snapshot.children) {
+
+
+                        val user = userSnapshot.getValue(Task::class.java)
+                        userArrayList.add(user!!)
+
+                    }
+
+                    userRecyclerview.adapter = TimifyAdapter(userArrayList)
+                }
+
+
+            }
+
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
+    }
+
 }
+
+
+
 
 

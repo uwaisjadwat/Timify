@@ -2,5 +2,6 @@
     <string name="app_name">Timify</string>
     <string name="nav_open">Open</string>
     <string name="nav_close">Close</string>
+    <string name="total_hours_format">Total Hours: %d</string>
 
 </resources>
